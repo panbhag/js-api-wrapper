@@ -1,0 +1,78 @@
+/**
+ * Created by JetBrains RubyMine.
+ * User: pankajbhageria
+ * Date: 17/08/12
+ * Time: 8:15 PM
+ * To change this template use File | Settings | File Templates.
+ */
+
+
+(function($){
+   //matches the url, type and the options and returns an array of [requestMapper,responseMapper] if found
+//else returns false
+//default : type: Get
+    $.myAjax = function(request)
+    {  console.log("resquest:", request);
+       if(!request.type)
+         request.type = "Get";
+
+       var maps = $.myAjax.map;
+       var result = _.find(maps,function( r ){
+
+            if(r.url != request.url)
+                 return false;
+
+            if(r.type && r.type.toLocaleLowerCase() != request.type.toLocaleLowerCase())
+                 return false;
+
+
+            if(r.data)
+            {
+                var match = _.contains(request.data,r.data);
+
+                if(match == false)
+                  return false;
+            }
+
+            return true;
+
+       });
+
+       if(result)
+        return {requestMap:result.request_map,responseMap:result.response_map};
+       else
+        return false;
+    }
+
+
+
+    $.myAjax.map = [];
+
+
+
+    $.myAjax.clearMap = function()
+    {
+
+        $.myAjax.map = [];
+
+    }
+
+    $.myAjax.addMap = function()
+    {
+       _.each(arguments,function(a){
+         $.myAjax.map.push(a);
+
+       });
+       //console.log($.rrMapper.map);
+
+    }
+
+
+
+
+
+
+
+
+
+})(jQuery);
